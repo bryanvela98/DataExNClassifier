@@ -3,6 +3,7 @@ from scripts.utils import read_file
 from glob import iglob
 import os
 from typing import List
+import re
 
 def read_and_concat_books(books_repo: str) -> str:
     """
@@ -26,8 +27,27 @@ def read_and_concat_books(books_repo: str) -> str:
 
 
 def tokenize(text: str):
-    ...
+    """ 
+    This function will tokenize the input text into individual words.
+    - input: a string of text
+    - output: a list of tokens (words)
+    """
+    # step1: handle spaces arround contractions
+    text = re.sub(r"(n't|'ll|'re|'ve|'s|'d|'m)", r" \1", text)
+    # step2: edge case ellipsis(protecting)
+    text = text.replace('...', ' ELLIPSIS ')
+    # step3: spaces around punctuation
+    text = re.sub(r'([,!?;:{}()\[\]<>])', r' \1 ', text)
+    # step4: period handling (space around periods that are not between digits)
+    text = re.sub(r'(?<!\d)\.(?!\d)', r' . ', text)
+    # step5: separate arithmetical operators
+    text = re.sub(r'([+\-*/=])', r' \1 ', text)
+    # step6: Split on whitespace
+    tokens = text.split()
+    # step7: restoring elipsis
+    tokens = [token if token != 'ELLIPSIS' else '...' for token in tokens]
 
+    return tokens
 
 def remove_special_characters(tokens: List) -> List[str]:
     """
