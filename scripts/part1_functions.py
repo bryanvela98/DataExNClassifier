@@ -25,6 +25,19 @@ def read_and_concat_books(books_repo: str) -> str:
 
     return concat_contents
 
+def read_books_as_documents(books_repo: str):
+    """
+    This function will read the content of all the books in the given path and return a list of strings, each representing a book.
+    - input: books_repo (str): The path to the directory containing the book files.
+    - output: list: A list of strings, each representing the content of a book.
+    """
+    books = list(iglob(os.path.join(books_repo, "*.txt")))
+    books_content = []
+    for book_path in books:
+        content = read_file(book_path)
+        cleaned = strip_headers(''.join(content))
+        books_content.append(cleaned)
+    return books_content
 
 def tokenize(text: str):
     """ 
