@@ -57,9 +57,18 @@ def remove_special_characters(tokens: List) -> List[str]:
 
 def remove_stopwords(tokens: List, stopwords: List = []) -> List[str]:
     """
-    This function will remove stopwords.
+    This function will remove common stopwords from the previous list of tokens to focus on meaningful words.
+    - input: a list of tokens
+    - output: a list of tokens without stopwords
     """
-    ...
+    # loading stopwords from the data file (data/stopwords.txt)
+    if not stopwords:
+        with open('data/stopwords.txt', 'r') as f:
+            stopwords = [line.strip() for line in f.readlines()]
+            
+    # filtering out the stopwords 
+    filtered_tokens = [token for token in tokens if token.lower() not in stopwords]
+    return filtered_tokens
 
 def preprocess(text: str) -> List[str]:
     """
