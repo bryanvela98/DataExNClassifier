@@ -51,9 +51,22 @@ def tokenize(text: str):
 
 def remove_special_characters(tokens: List) -> List[str]:
     """
-    This function will remove special characters.
+    This function will remove special characters. Keeping only alphabetic, numeric, or alphanumeric tokens
+    - input: a list of tokens
+    - output: a list of tokens without special characters
     """
-    ...
+    def token_is_valid(token):
+        #step 1: checking alphanumeric
+        if token.isalnum():
+            return True
+        #step 2: checking if it's a valid number (includes decimals)
+        try:
+            float(token)
+            return True
+        except ValueError:
+            return False
+    filtered_tokens = [token for token in tokens if token_is_valid(token)]
+    return filtered_tokens
 
 def remove_stopwords(tokens: List, stopwords: List = []) -> List[str]:
     """
